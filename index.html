@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emm-Rose D. Opalla | Virtual Assistant</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+:root {
+  --fuchsia:#FF007F; --fuchsia-light:#FF4DA6;
+  --fuchsia-pale:#FFD6EB; --fuchsia-dark:#CC0066; --dark:#1a1a2e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; background:#fff0f7; color:var(--dark); overflow-x:hidden; }
+
+/* CURSOR */
+.cur { width:8px; height:8px; background:var(--fuchsia); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:999999; transform:translate(-50%,-50%); transition:transform .15s ease, background .2s; }
+.cur-ring { width:32px; height:32px; border:1.5px solid var(--fuchsia); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:999998; transform:translate(-50%,-50%); transition:width .25s ease, height .25s ease, opacity .25s; opacity:.5; }
+.cur.big { transform:translate(-50%,-50%) scale(1.6); background:var(--fuchsia-light); }
+.cur-ring.big { width:48px; height:48px; opacity:.25; }
+*, button, span, div { cursor:none !important; }
+
+/* NAV */
+nav { position:fixed; top:0; width:100%; z-index:9999; background:rgba(255,255,255,0.97); backdrop-filter:blur(12px); border-bottom:2px solid var(--fuchsia-pale); box-shadow:0 2px 20px rgba(255,0,127,.08); }
+.nav-inner { max-width:1200px; margin:0 auto; padding:16px 48px; display:flex; justify-content:space-between; align-items:center; }
+.nav-logo { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:var(--fuchsia); }
+.hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; padding:4px; }
+.hamburger span { display:block; width:24px; height:2px; background:var(--fuchsia); border-radius:2px; }
+.nav-links { display:flex; flex-direction:row; gap:28px; list-style:none; }
+.nav-item { font-size:.88rem; font-weight:500; color:var(--dark); letter-spacing:.5px; transition:color .2s; }
+.nav-item:hover { color:var(--fuchsia); }
+
+/* HERO */
+.hero { min-height:100vh; background:linear-gradient(135deg,#fff0f7,#ffe0f0,#ffd6eb); display:flex; align-items:center; justify-content:center; padding:120px 48px 60px; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; top:-100px; right:-100px; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(255,0,127,.12),transparent 70%); }
+.hero-content { display:flex; align-items:center; gap:64px; max-width:1100px; width:100%; position:relative; z-index:1; flex-wrap:wrap; justify-content:center; }
+.hero-text { flex:1; min-width:260px; }
+.hero-badge { display:inline-block; background:linear-gradient(135deg,var(--fuchsia),var(--fuchsia-light)); color:#fff; font-size:.75rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; padding:6px 16px; border-radius:20px; margin-bottom:20px; box-shadow:0 4px 15px rgba(255,0,127,.3); transition:all .3s; }
+.hero-text h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.8rem); line-height:1.15; color:var(--dark); margin-bottom:16px; }
+.hero-text h1 span { color:var(--fuchsia); }
+.hero-text p { font-size:1rem; color:#555; line-height:1.7; max-width:460px; margin-bottom:36px; }
+.hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
+.btn-primary { background:linear-gradient(135deg,var(--fuchsia),var(--fuchsia-light)); color:#fff; padding:14px 28px; border-radius:50px; font-weight:600; font-size:.9rem; font-family:inherit; border:none; box-shadow:0 8px 25px rgba(255,0,127,.35); transition:transform .2s,box-shadow .2s; }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 30px rgba(255,0,127,.45); }
+.btn-outline { border:2px solid var(--fuchsia); color:var(--fuchsia); padding:12px 26px; border-radius:50px; font-weight:600; font-size:.9rem; font-family:inherit; background:none; transition:all .2s; }
+.btn-outline:hover { background:var(--fuchsia); color:#fff; }
+.hero-photo { flex-shrink:0; }
+.photo-frame { width:300px; height:360px; border-radius:40% 60% 60% 40%/40% 40% 60% 60%; overflow:hidden; border:4px solid var(--fuchsia-light); box-shadow:0 20px 60px rgba(255,0,127,.35); animation:morph 8s ease-in-out infinite; }
+.photo-frame img { width:100%; height:100%; object-fit:cover; object-position:top; display:block; }
+@keyframes morph { 0%,100%{border-radius:40% 60% 60% 40%/40% 40% 60% 60%} 50%{border-radius:60% 40% 40% 60%/60% 60% 40% 40%} }
+
+/* SECTIONS */
+.sw { max-width:1100px; margin:0 auto; padding:80px 48px; }
+.slabel { font-size:.75rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--fuchsia); margin-bottom:12px; }
+.stitle { font-family:'Playfair Display',serif; font-size:clamp(1.7rem,3vw,2.6rem); color:var(--dark); margin-bottom:14px; }
+.sline { width:60px; height:4px; border-radius:2px; background:linear-gradient(90deg,var(--fuchsia),var(--fuchsia-light)); margin-bottom:44px; }
+
+/* ABOUT */
+.about-inner { display:flex; gap:48px; align-items:flex-start; flex-wrap:wrap; }
+.about-text { flex:1; min-width:260px; }
+.about-text p { color:#555; line-height:1.8; font-size:.97rem; margin-bottom:16px; }
+.about-stats { display:flex; gap:32px; margin-top:28px; flex-wrap:wrap; }
+.stat-num { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:700; color:var(--fuchsia); display:block; }
+.stat-label { font-size:.75rem; color:#888; text-transform:uppercase; letter-spacing:1px; }
+.about-hi { display:flex; flex-direction:column; gap:14px; min-width:240px; }
+.hi-card { background:linear-gradient(135deg,var(--fuchsia-pale),#fff); border-left:4px solid var(--fuchsia); border-radius:12px; padding:14px 18px; position:relative; overflow:hidden; transition:all .3s; }
+.hi-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--fuchsia),var(--fuchsia-light)); opacity:0; transition:opacity .3s; border-radius:12px; }
+.hi-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(255,0,127,.22); }
+.hi-card:hover::before { opacity:1; }
+.hi-card:hover strong, .hi-card:hover span { color:#fff; }
+.hi-card strong { display:block; font-size:.9rem; color:var(--dark); margin-bottom:4px; position:relative; z-index:1; transition:color .3s; }
+.hi-card span { font-size:.82rem; color:#777; position:relative; z-index:1; transition:color .3s; }
+
+/* SERVICES */
+.svc-bg { background:linear-gradient(135deg,#fff 60%,#fff0f7 100%); }
+.svc-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:22px; }
+.svc-card { background:#fff; border:2px solid var(--fuchsia-pale); border-radius:20px; padding:30px 22px; transition:all .3s; position:relative; overflow:hidden; }
+.svc-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--fuchsia),var(--fuchsia-light)); opacity:0; transition:opacity .3s; border-radius:18px; }
+.svc-card:hover { border-color:var(--fuchsia); transform:translateY(-6px); box-shadow:0 16px 40px rgba(255,0,127,.25); }
+.svc-card:hover::before { opacity:1; }
+.svc-card:hover .si, .svc-card:hover h3, .svc-card:hover p { color:#fff; }
+.si { font-size:2rem; margin-bottom:14px; position:relative; z-index:1; }
+.svc-card h3 { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--dark); margin-bottom:8px; position:relative; z-index:1; transition:color .3s; }
+.svc-card p { font-size:.85rem; color:#777; line-height:1.6; position:relative; z-index:1; transition:color .3s; }
+
+/* SKILLS */
+.sk-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:16px; }
+.sk-box { background:#fff; border:2px solid var(--fuchsia-pale); border-radius:18px; padding:26px 14px 20px; text-align:center; position:relative; overflow:hidden; transition:all .28s; }
+.sk-box::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--fuchsia),var(--fuchsia-light)); opacity:0; transition:opacity .28s; border-radius:16px; }
+.sk-box:hover { transform:translateY(-6px); border-color:var(--fuchsia); box-shadow:0 14px 36px rgba(255,0,127,.22); }
+.sk-box:hover::before { opacity:1; }
+.sk-box:hover .ski, .sk-box:hover .skn { color:#fff; }
+.ski { font-size:1.9rem; margin-bottom:10px; display:block; position:relative; z-index:1; }
+.skn { font-size:.82rem; font-weight:600; color:var(--dark); position:relative; z-index:1; transition:color .28s; }
+
+/* PROJECTS */
+.proj-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:22px; }
+.proj-card { background:#fff; border:2px solid var(--fuchsia-pale); border-radius:22px; padding:28px 22px 22px; display:flex; flex-direction:column; gap:10px; transition:all .3s; }
+.proj-card:hover { transform:translateY(-6px); border-color:var(--fuchsia-light); box-shadow:0 16px 40px rgba(255,0,127,.15); }
+.proj-icon { font-size:2.2rem; }
+.proj-tag { display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--fuchsia); background:var(--fuchsia-pale); padding:4px 12px; border-radius:20px; width:fit-content; }
+.proj-card h3 { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--dark); }
+.proj-card p { font-size:.85rem; color:#777; line-height:1.65; flex:1; }
+.proj-btns { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+.pbf { background:linear-gradient(135deg,var(--fuchsia),var(--fuchsia-light)); color:#fff; border:none; border-radius:50px; padding:10px 18px; font-size:.8rem; font-weight:600; font-family:inherit; box-shadow:0 4px 14px rgba(255,0,127,.3); transition:all .2s; }
+.pbf:hover { transform:translateY(-2px); }
+.pbg { background:none; border:2px solid var(--fuchsia); color:var(--fuchsia); border-radius:50px; padding:8px 18px; font-size:.8rem; font-weight:600; font-family:inherit; transition:all .2s; }
+.pbg:hover { background:var(--fuchsia); color:#fff; }
+
+/* MODAL */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:99999; align-items:center; justify-content:center; padding:24px; }
+.modal-overlay.show { display:flex; }
+.modal-box { background:#fff; border-radius:24px; padding:40px 36px; max-width:520px; width:100%; position:relative; box-shadow:0 24px 60px rgba(255,0,127,.25); max-height:85vh; overflow-y:auto; }
+.modal-close { position:absolute; top:16px; right:18px; background:var(--fuchsia-pale); border:none; border-radius:50%; width:34px; height:34px; font-size:1.1rem; color:var(--fuchsia); font-weight:700; display:flex; align-items:center; justify-content:center; line-height:1; }
+.modal-close:hover { background:var(--fuchsia); color:#fff; }
+.detail-row { margin-bottom:14px; padding:14px 18px; background:linear-gradient(135deg,var(--fuchsia-pale),#fff); border-left:4px solid var(--fuchsia); border-radius:12px; }
+.detail-row strong { display:block; font-size:.78rem; color:var(--fuchsia); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.detail-row span { font-size:.9rem; color:#555; line-height:1.6; }
+
+/* FAQ */
+.faq-list { display:flex; flex-direction:column; gap:12px; max-width:760px; margin:0 auto; }
+.faq-item { background:#fff; border:2px solid var(--fuchsia-pale); border-radius:16px; overflow:hidden; transition:border-color .2s,box-shadow .2s; }
+.faq-item.open { border-color:var(--fuchsia-light); box-shadow:0 8px 28px rgba(255,0,127,.12); }
+.faq-q { width:100%; background:none; border:none; display:flex; justify-content:space-between; align-items:center; padding:18px 22px; gap:14px; font-family:'Inter',sans-serif; font-size:.93rem; font-weight:600; color:var(--dark); text-align:left; outline:none; }
+.faq-q:hover { color:var(--fuchsia); }
+.faq-icon { flex-shrink:0; width:30px; height:30px; background:linear-gradient(135deg,var(--fuchsia),var(--fuchsia-light)); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.3rem; transition:transform .3s; }
+.faq-item.open .faq-icon { transform:rotate(45deg); }
+.faq-a { max-height:0; overflow:hidden; transition:max-height .4s ease,padding .3s; font-size:.9rem; color:#666; line-height:1.75; padding:0 22px; }
+.faq-item.open .faq-a { max-height:200px; padding:0 22px 18px; }
+
+/* CONTACT */
+.contact-wrap { background:linear-gradient(135deg,var(--fuchsia-dark),var(--fuchsia),var(--fuchsia-light)); border-radius:28px; padding:60px 40px; color:#fff; text-align:center; box-shadow:0 20px 60px rgba(255,0,127,.35); }
+.contact-wrap .slabel { color:rgba(255,255,255,.7); }
+.contact-wrap .stitle { color:#fff; }
+.contact-wrap > p { color:rgba(255,255,255,.85); margin-bottom:40px; }
+.c-div { width:60px; height:4px; background:rgba(255,255,255,.4); border-radius:2px; margin:0 auto 16px; }
+.c-links { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; }
+.c-card { background:rgba(255,255,255,.18); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:20px 24px; display:flex; align-items:center; gap:12px; color:#fff; min-width:190px; flex:1; max-width:250px; transition:background .2s,transform .2s; }
+.c-card:hover { background:rgba(255,255,255,.28); transform:translateY(-3px); }
+.cc-icon { font-size:1.4rem; }
+.cc-label { font-size:.7rem; opacity:.75; text-transform:uppercase; letter-spacing:1px; }
+.cc-val { font-size:.85rem; font-weight:600; word-break:break-all; }
+
+footer { background:var(--dark); color:rgba(255,255,255,.5); text-align:center; padding:22px 48px; font-size:.8rem; }
+footer span { color:var(--fuchsia-light); }
+
+@media(max-width:768px){
+  .nav-inner { padding:14px 20px; }
+  .hamburger { display:flex; }
+  .nav-links { display:none; flex-direction:column; gap:0; position:absolute; top:100%; left:0; right:0; background:#fff; border-bottom:2px solid var(--fuchsia-pale); box-shadow:0 8px 24px rgba(255,0,127,.1); padding:8px 0; }
+  .nav-links.open { display:flex; }
+  .nav-links li { width:100%; }
+  .nav-item { display:block; padding:14px 24px; font-size:.95rem; border-bottom:1px solid var(--fuchsia-pale); }
+  .nav-links li:last-child .nav-item { border-bottom:none; }
+  .hero { padding:90px 20px 50px; }
+  .hero-content { flex-direction:column-reverse; gap:28px; text-align:center; }
+  .hero-text p { margin:0 auto 28px; }
+  .hero-btns { justify-content:center; }
+  .photo-frame { width:200px; height:240px; }
+  .sw { padding:60px 20px; }
+  .about-inner { flex-direction:column; }
+  .about-hi { width:100%; }
+  .svc-grid { grid-template-columns:1fr 1fr; }
+  .sk-grid { grid-template-columns:repeat(2,1fr); }
+  .proj-grid { grid-template-columns:1fr; }
+  .contact-wrap { padding:40px 20px; }
+  .c-links { flex-direction:column; align-items:center; }
+  .c-card { max-width:100%; width:100%; }
+  .modal-box { padding:28px 20px; }
+}
+@media(max-width:420px){
+  .svc-grid { grid-template-columns:1fr; }
+  .hero-text h1 { font-size:1.9rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">ERO.</div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><span class="nav-item" onclick="goTo('about')">About</span></li>
+      <li><span class="nav-item" onclick="goTo('services')">Services</span></li>
+      <li><span class="nav-item" onclick="goTo('skills')">Skills</span></li>
+      <li><span class="nav-item" onclick="goTo('projects')">Projects</span></li>
+      <li><span class="nav-item" onclick="goTo('faq')">FAQ</span></li>
+      <li><span class="nav-item" onclick="goTo('contact')">Contact</span></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <span class="hero-badge" id="badge">✦ Available for Hire</span>
+      <h1>Hi, I'm <span>Emm-Rose</span><br>D. Opalla</h1>
+      <p>A results-driven Virtual Assistant skilled in email management, graphic design, content organization, and administrative support — here to help your business run smoother, look better, and grow faster.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="goTo('contact')">Get In Touch</button>
+        <button class="btn-outline" onclick="goTo('services')">View Services</button>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="photo-frame">
+        <img src="https://i.postimg.cc/7PVp2vm6/b8bc3fd7-a9a7-4852-ab72-63f36d3239bc.jpg" alt="Emm-Rose D. Opalla"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div id="about"><div class="sw">
+  <div class="slabel">Who I Am</div>
+  <div class="stitle">About Me</div>
+  <div class="sline"></div>
+  <div class="about-inner">
+    <div class="about-text">
+      <p>I'm <strong>Emm-Rose D. Opalla</strong>, a dedicated and detail-driven Virtual Assistant based in the Philippines. I help businesses stay organized, look professional, and operate efficiently — so you can focus on what matters most.</p>
+      <p>I bring a sharp eye for detail, strong communication skills, and a commitment to quality across email management, graphic design, content organization, and administrative support. Every task I handle is done with care, precision, and a focus on real results.</p>
+      <div class="about-stats">
+        <div class="stat"><span class="stat-num">4+</span><span class="stat-label">Core Skills</span></div>
+        <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Dedicated</span></div>
+        <div class="stat"><span class="stat-num">PH</span><span class="stat-label">Based</span></div>
+      </div>
+    </div>
+    <div class="about-hi">
+      <div class="hi-card"><strong>📧 Email Management</strong><span>Inbox organization, filtering & professional correspondence</span></div>
+      <div class="hi-card"><strong>🎨 Graphic Design</strong><span>Visual content creation for social media & branding</span></div>
+      <div class="hi-card"><strong>📁 Content Organization</strong><span>File management, scheduling & content calendars</span></div>
+      <div class="hi-card"><strong>🖥️ Admin Support</strong><span>Data entry, research & general virtual assistance</span></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- SERVICES -->
+<div class="svc-bg"><div id="services" class="sw">
+  <div class="slabel">What I Offer</div>
+  <div class="stitle">My Services</div>
+  <div class="sline"></div>
+  <div class="svc-grid">
+    <div class="svc-card"><div class="si">📬</div><h3>Email Management</h3><p>Organize, filter, and respond to emails professionally. Keep your inbox clean and communications flowing.</p></div>
+    <div class="svc-card"><div class="si">🎨</div><h3>Graphic Design</h3><p>Create eye-catching visuals, social media graphics, and branded materials that resonate with your audience.</p></div>
+    <div class="svc-card"><div class="si">📋</div><h3>Content Organization</h3><p>Structure your content, manage files, and maintain editorial calendars to keep everything on track.</p></div>
+    <div class="svc-card"><div class="si">💼</div><h3>Administrative Support</h3><p>Data entry, research, scheduling, and day-to-day tasks to keep your business running smoothly.</p></div>
+  </div>
+</div></div>
+
+<!-- SKILLS -->
+<div id="skills"><div class="sw">
+  <div class="slabel">My Expertise</div>
+  <div class="stitle">Skills & Tools</div>
+  <div class="sline"></div>
+  <div class="sk-grid">
+    <div class="sk-box"><span class="ski">📬</span><span class="skn">Email Management</span></div>
+    <div class="sk-box"><span class="ski">🎨</span><span class="skn">Graphic Design</span></div>
+    <div class="sk-box"><span class="ski">📁</span><span class="skn">Content Organization</span></div>
+    <div class="sk-box"><span class="ski">💼</span><span class="skn">Admin Support</span></div>
+    <div class="sk-box"><span class="ski">💬</span><span class="skn">Communication</span></div>
+    <div class="sk-box"><span class="ski">⏰</span><span class="skn">Time Management</span></div>
+    <div class="sk-box"><span class="ski">📅</span><span class="skn">Scheduling</span></div>
+    <div class="sk-box"><span class="ski">🔍</span><span class="skn">Research</span></div>
+    <div class="sk-box"><span class="ski">📊</span><span class="skn">Data Entry</span></div>
+    <div class="sk-box"><span class="ski">📱</span><span class="skn">Social Media</span></div>
+  </div>
+</div></div>
+
+<!-- PROJECTS -->
+<div id="projects"><div class="sw">
+  <div class="slabel">My Work</div>
+  <div class="stitle">Projects</div>
+  <div class="sline"></div>
+  <div class="proj-grid">
+    <div class="proj-card">
+      <div class="proj-icon">🎬</div><div class="proj-tag">Creative</div>
+      <h3>Video Editing</h3>
+      <p>Professional video edits for social media, reels, promotional clips, and brand storytelling content.</p>
+      <div class="proj-btns">
+        <button class="pbf">View Project</button>
+        <button class="pbg" onclick="showDetails('video')">Details</button>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🎨</div><div class="proj-tag">Design</div>
+      <h3>Graphic Designs</h3>
+      <p>Eye-catching visuals including social media graphics, posters, banners, and branded templates.</p>
+      <div class="proj-btns">
+        <button class="pbf">View Project</button>
+        <button class="pbg" onclick="showDetails('graphic')">Details</button>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">📧</div><div class="proj-tag">Admin</div>
+      <h3>Email Management</h3>
+      <p>Organized inboxes, professional email responses, labeling systems, and follow-up tracking for busy clients.</p>
+      <div class="proj-btns">
+        <button class="pbf">View Project</button>
+        <button class="pbg" onclick="showDetails('email')">Details</button>
+      </div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">📅</div><div class="proj-tag">Productivity</div>
+      <h3>Calendar Scheduling</h3>
+      <p>Seamless appointment setting, meeting coordination, and calendar management to keep your day on track.</p>
+      <div class="proj-btns">
+        <button class="pbf">View Project</button>
+        <button class="pbg" onclick="showDetails('calendar')">Details</button>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- FAQ -->
+<div id="faq"><div class="sw">
+  <div class="slabel">Got Questions?</div>
+  <div class="stitle">Frequently Asked Questions</div>
+  <div class="sline"></div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)"><span>What services do you offer as a Virtual Assistant?</span><span class="faq-icon">+</span></button><div class="faq-a">I offer email management, graphic design, content organization, and general administrative support. Whether you need your inbox cleaned up, social media graphics made, or day-to-day tasks handled — I've got you covered!</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)"><span>How do we get started working together?</span><span class="faq-icon">+</span></button><div class="faq-a">Simple! Just send me a message via email, phone, or Facebook. We'll have a quick chat about what you need, and I'll walk you through how I can help from there.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)"><span>What are your working hours?</span><span class="faq-icon">+</span></button><div class="faq-a">I'm flexible! I can adjust my schedule to match your timezone and business needs. Just let me know what works best for you and we'll figure it out together.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)"><span>Do you work with clients outside the Philippines?</span><span class="faq-icon">+</span></button><div class="faq-a">Absolutely! As a virtual assistant, I work 100% online, so I can support clients from anywhere in the world. Distance is no barrier!</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)"><span>How do you communicate with clients?</span><span class="faq-icon">+</span></button><div class="faq-a">I'm comfortable using email, Facebook Messenger, WhatsApp, Zoom, or whatever platform you prefer. Clear and timely communication is one of my top priorities.</div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFAQ(this)"><span>Are your rates negotiable?</span><span class="faq-icon">+</span></button><div class="faq-a">Yes! Rates depend on the type of work, hours needed, and project scope. I'm open to discussing a package that fits your budget. Just reach out and let's talk!</div></div>
+  </div>
+</div></div>
+
+<!-- CONTACT -->
+<div id="contact"><div class="sw">
+  <div class="contact-wrap">
+    <div class="slabel">Let's Work Together</div>
+    <div class="stitle">Get In Touch</div>
+    <div class="c-div"></div>
+    <p>Ready to delegate and grow? I'd love to support you and your business!</p>
+    <div class="c-links">
+      <div class="c-card" onclick="copyEmail()" style="cursor:none;" id="emailCard">
+        <span class="cc-icon">📧</span>
+        <div><div class="cc-label" id="emailLabel">Click to Copy</div><div class="cc-val">emmroseopalla89@gmail.com</div></div>
+      </div>
+      <div class="c-card">
+        <span class="cc-icon">📱</span>
+        <div><div class="cc-label">Phone</div><div class="cc-val">09055731316</div></div>
+      </div>
+      <div class="c-card" onclick="window.open('https://www.facebook.com/emmrose.opalla.3','_blank')">
+        <span class="cc-icon">👤</span>
+        <div><div class="cc-label">Facebook</div><div class="cc-val">Emm-Rose Opalla</div></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<footer><p>© 2026 <span>Emm-Rose D. Opalla</span> · Virtual Assistant & Content Manager · Made with 💗</p></footer>
+
+<!-- BACK TO TOP -->
+<div style="text-align:center; padding:32px 0 8px; background:var(--dark);">
+  <button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="
+    background:none; border:2px solid rgba(255,255,255,0.3);
+    color:rgba(255,255,255,0.7); border-radius:50px;
+    padding:12px 32px; font-family:'Inter',sans-serif;
+    font-size:0.88rem; font-weight:600; letter-spacing:2px;
+    text-transform:uppercase; transition:all .3s;
+  ">↑ Back to Top</button>
+</div>
+
+<script>
+// ── BACK TO TOP ──
+var backTop = document.getElementById('backTop');
+backTop.addEventListener('mouseenter', function() {
+  this.style.background = 'linear-gradient(135deg,#FF007F,#FF4DA6)';
+  this.style.borderColor = 'transparent';
+  this.style.color = '#fff';
+  this.style.transform = 'translateY(-2px)';
+  this.style.boxShadow = '0 8px 24px rgba(255,0,127,0.4)';
+});
+backTop.addEventListener('mouseleave', function() {
+  this.style.background = 'none';
+  this.style.borderColor = 'rgba(255,255,255,0.3)';
+  this.style.color = 'rgba(255,255,255,0.7)';
+  this.style.transform = 'translateY(0)';
+  this.style.boxShadow = 'none';
+});
+
+// ── CURSOR ──
+var cur = document.getElementById('cur');
+var ring = document.getElementById('curRing');
+var mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', function(e) {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+  // detect if cursor is over dark/fuchsia bg
+  var el = document.elementFromPoint(mx, my);
+  var onDark = el && (el.closest('.contact-wrap') || el.closest('footer'));
+  cur.style.background = onDark ? '#fff' : '#FF007F';
+  ring.style.borderColor = onDark ? '#fff' : '#FF007F';
+});
+
+(function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('button, .nav-item, .c-card, .svc-card, .sk-box, .proj-card, .hi-card, .faq-q, .hero-badge, .pbf, .pbg').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { cur.classList.add('big'); ring.classList.add('big'); });
+  el.addEventListener('mouseleave', function() { cur.classList.remove('big'); ring.classList.remove('big'); });
+});
+
+// ── BADGE ──
+var badge = document.getElementById('badge');
+badge.addEventListener('mouseenter', function() {
+  this.style.transform = 'scale(1.1) translateY(-3px)';
+  this.style.boxShadow = '0 12px 30px rgba(255,0,127,0.55)';
+  this.style.background = 'linear-gradient(135deg,#fff,#FFD6EB)';
+  this.style.color = '#FF007F';
+  this.style.letterSpacing = '4px';
+});
+badge.addEventListener('mouseleave', function() {
+  this.style.transform = '';
+  this.style.boxShadow = '0 4px 15px rgba(255,0,127,0.3)';
+  this.style.background = 'linear-gradient(135deg,#FF007F,#FF4DA6)';
+  this.style.color = '#fff';
+  this.style.letterSpacing = '2px';
+});
+
+// ── NAV ──
+document.getElementById('hamburger').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+function goTo(id) {
+  var el = document.getElementById(id);
+  if (el) { el.scrollIntoView({ behavior:'smooth' }); document.getElementById('navLinks').classList.remove('open'); }
+}
+
+// ── DETAILS DATA ──
+var detailsData = {
+  video: {
+    icon:'🎬', tag:'Creative', title:'Video Editing',
+    rows:[
+      { label:'What I Do', text:'I edit raw footage into polished, engaging videos tailored for your brand and platform.' },
+      { label:'Deliverables', text:'Short-form reels, YouTube videos, promotional clips, intro/outro sequences, and branded story content.' },
+      { label:'Tools Used', text:'CapCut, VN Editor, and other mobile/desktop editing platforms.' },
+      { label:'Turnaround', text:'Typically 1–3 business days depending on length and complexity.' },
+      { label:'Best For', text:'Content creators, small businesses, coaches, and brands wanting consistent, professional video content.' }
+    ]
+  },
+  graphic: {
+    icon:'🎨', tag:'Design', title:'Graphic Designs',
+    rows:[
+      { label:'What I Do', text:'I create clean, on-brand visuals that communicate your message and attract your target audience.' },
+      { label:'Deliverables', text:'Social media posts, story templates, flyers, banners, logos, and presentation decks.' },
+      { label:'Tools Used', text:'Canva Pro and other design platforms.' },
+      { label:'Turnaround', text:'24–48 hours for standard designs; complex projects may take 2–4 days.' },
+      { label:'Best For', text:'Businesses and individuals who need consistent, eye-catching visuals without hiring a full-time designer.' }
+    ]
+  },
+  email: {
+    icon:'📧', tag:'Admin', title:'Email Management',
+    rows:[
+      { label:'What I Do', text:'I take full control of your inbox — organizing, filtering, responding, and flagging what needs your attention.' },
+      { label:'Deliverables', text:'Inbox cleanup, folder/label systems, draft responses, follow-up tracking, and spam management.' },
+      { label:'Tools Used', text:'Gmail, Outlook, and email management extensions.' },
+      { label:'Turnaround', text:'Daily monitoring and same-day response drafts during agreed working hours.' },
+      { label:'Best For', text:'Busy entrepreneurs, executives, and teams overwhelmed by high email volume who need a reliable VA.' }
+    ]
+  },
+  calendar: {
+    icon:'📅', tag:'Productivity', title:'Calendar Scheduling',
+    rows:[
+      { label:'What I Do', text:'I manage your schedule end-to-end — setting appointments, avoiding conflicts, and keeping your day running on time.' },
+      { label:'Deliverables', text:'Meeting scheduling, appointment setting, calendar organization, reminders, and time-blocking.' },
+      { label:'Tools Used', text:'Google Calendar, Calendly, and scheduling integrations.' },
+      { label:'Turnaround', text:'Real-time scheduling updates during agreed working hours.' },
+      { label:'Best For', text:'Coaches, consultants, and business owners who need their time protected and every appointment managed professionally.' }
+    ]
+  }
+};
+
+// ── MODAL ──
+function showDetails(type) {
+  var d = detailsData[type];
+  var html = '<span style="background:#FFD6EB;color:#FF007F;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px;">' + d.tag + '</span>';
+  html += '<div style="font-size:2rem;margin:12px 0 4px;">' + d.icon + '</div>';
+  html += '<h2 style="font-family:Playfair Display,serif;font-size:1.6rem;color:#1a1a2e;margin-bottom:4px;">' + d.title + '</h2>';
+  html += '<div style="width:48px;height:4px;border-radius:2px;background:linear-gradient(90deg,#FF007F,#FF4DA6);margin-bottom:24px;"></div>';
+  d.rows.forEach(function(r) {
+    html += '<div class="detail-row"><strong>' + r.label + '</strong><span>' + r.text + '</span></div>';
+  });
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── EMAIL COPY ──
+function copyEmail() {
+  navigator.clipboard.writeText('emmroseopalla89@gmail.com').then(function() {
+    var lbl = document.getElementById('emailLabel');
+    lbl.textContent = '✔ Copied!';
+    setTimeout(function() { lbl.textContent = 'Click to Copy'; }, 2000);
+  });
+}
+
+// ── FAQ ──
+function toggleFAQ(btn) {
+  var item = btn.parentElement;
+  var open = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+  if (!open) item.classList.add('open');
+}
+</script>
+</body>
+</html>
